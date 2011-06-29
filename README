@@ -1,0 +1,9 @@
+YT.fm Extension lets users scrobble the music videos they watch on YouTube to their Last.fm account. The videos are selected for scrobbling based on what its category name is, that is, only the videos with category name as Music, are scrobbled to the Last.fm logs.
+
+The extension uses YouTube and Last.fm APIs for the following.
+YouTube Data API for fetching video title and category of the streaming video.
+Last.fm REST API to authenticate users, perform track based search and scrobbling the music video to the user's Last.fm logs.
+
+Download URL: http://code.google.com/p/ytfm-scrobbler-firefox/
+
+Developer: Ashish Dubey(ashish.dubey91@gmail.com)
