@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+  
+    <em:id>yt.fm@ashishdubey.info</em:id>
+    <em:name>YT.fm Youtube Scrobbler</em:name>
+    <em:version>1.0</em:version>
+	<em:type>2</em:type>
+    <em:description>YT.fm lets you to scrobble the real time streaming music videos on YouTube to your Last.fm account</em:description>
+    <em:creator>Ashish Dubey</em:creator>
+    <!-- optional items -->
+    <em:contributor>JIIT-OSDC</em:contributor>
+    <em:homepageURL>http://code.google.com/p/ytfm-addon-firefox</em:homepageURL>
+    <em:iconURL>chrome://ytfm/content/ytfmlogo.png</em:iconURL>
+
+    <!-- Firefox -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>3.6</em:minVersion>
+        <em:maxVersion>4.0.*</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+  </Description>
+
+</RDF>

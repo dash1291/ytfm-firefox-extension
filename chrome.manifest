@@ -1,0 +1,8 @@
+content	ytfm	content/
+skin	ytfm	regular/1.0	skin/
+overlay	chrome://browser/content/browser.xul	chrome://ytfm/content/overlay.xul
+locale	ytfm	en-US	locale/en-US/
+
+
+
+
