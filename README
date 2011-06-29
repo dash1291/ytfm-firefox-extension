@@ -4,6 +4,6 @@ The extension uses YouTube and Last.fm APIs for the following.
 YouTube Data API for fetching video title and category of the streaming video.
 Last.fm REST API to authenticate users, perform track based search and scrobbling the music video to the user's Last.fm logs.
 
-Download URL: http://code.google.com/p/ytfm-scrobbler-firefox/
+Download URL: https://addons.mozilla.org/en-US/firefox/addon/ytfm-youtube-scrobbler/
 
 Developer: Ashish Dubey(ashish.dubey91@gmail.com)
