@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://ytfm/skin/over.css" type="text/css"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://ytfm/locale/overlay.dtd">
+<window
+    id="ytfm-settings-window"
+    title="YT.fm"
+    orient="horizontal"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	onload="LoadUserInfo()">
+<script type="text/javascript" src="chrome://ytfm/content/overlay.js"></script>
+	<hbox id="ytfm-settings-container">
+	<vbox id="ytfm-image-container" width="150" height="150">
+	<image id="ytfm-user-image"/>
+	</vbox>
+	<vbox id="ytfm-user-container">
+	  <label id="ytfm-loggedas" value="You are logged in as"/><label id="ytfm-userlabel" value=""/>
+	<label id="ytfm-notyou" value="Not you?"/>
+	<button id="ytfm-login-button" class="ytfm-login" label="Login with your account" onclick="openAuth();window.close();"/>
+	<label id="ytfm-status" />
+	
+	</vbox>
+</hbox>
+
+</window>

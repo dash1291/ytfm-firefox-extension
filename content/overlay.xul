@@ -1,22 +1,12 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://ytfm/skin/over.css" type="text/css"?>
 <!DOCTYPE overlay SYSTEM "chrome://ytfm/locale/overlay.dtd">
-<overlay id="socialize" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<overlay id="ytfm" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 <script type="text/javascript" src="chrome://ytfm/content/overlay.js"></script>
-
-  <toolbar id="nav-bar">
-  <toolbarbutton image="chrome://ytfm/content/ytfmlogo_small.png" id="drop" type="menu" label="Share" onload="init()" onclick="LoadUserInfo()">
-  <panel id="ytfm-panel">
-	<vbox id="ytfm-box">
-	<hbox id="ytfm-loggedinbox">
-	  <label id="ytfm-loggedas" value="You are logged in as"/><label id="ytfm-userlabel" value=""/></hbox>
-		<hbox class="ytfm-loginbox"><label id="ytfm-notyou" value="Not you?"/>
-	<button id="ytfm-login-button" class="ytfm-login" label="Login with your account" onclick="openAuth()"/></hbox>
-	<label id="ytfm-status" />
-</vbox>
-	</panel>
-
-
-	</toolbarbutton>
-  </toolbar>
+<script type="text/javascript">
+init();
+</script>
+  <menupopup id="menu_ToolsPopup">
+	<menuitem id="ytfm-menu-item" insertafter="browserToolsSeparator" label="YT.fm" onclick="openwindow()"/>
+</menupopup>
 </overlay>

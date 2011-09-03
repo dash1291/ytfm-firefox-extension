@@ -2,9 +2,22 @@
 {
 border-radius:10px;
 }
-#ytfm-box
+#ytfm-settings-container
 {
-background-image:-moz-linear-gradient(top,#444,#777);
+margin-top:20px;
+margin-left:20px;
+}
+#ytfm-user-image
+{
+width:126px;
+height:168px;
+border:1px solid white;
+box-shadow:0px 0px 1px 1px grey;
+}
+#ytfm-user-container
+{
+padding-top:30px;
+padding-left:10px;
 }
 #ytfm-loggedinbox
 {
@@ -29,10 +42,4 @@ padding-top:5px;
 color:#EB337D;
 font-weight:bold;
 
-}
-#ytfm-nowplaying-panel
-{
-position:absolute;
-top:30px;
-left:500px;
 }

@@ -6,7 +6,7 @@
   
     <em:id>yt.fm@ashishdubey.info</em:id>
     <em:name>YT.fm Youtube Scrobbler</em:name>
-    <em:version>1.0</em:version>
+    <em:version>0.9.4</em:version>
 	<em:type>2</em:type>
     <em:description>YT.fm lets you to scrobble the real time streaming music videos on YouTube to your Last.fm account</em:description>
     <em:creator>Ashish Dubey</em:creator>
@@ -19,8 +19,8 @@
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-        <em:minVersion>3.6</em:minVersion>
-        <em:maxVersion>4.0.*</em:maxVersion>
+        <em:minVersion>4.0</em:minVersion>
+        <em:maxVersion>6.*</em:maxVersion>
       </Description>
     </em:targetApplication>
 
