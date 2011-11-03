@@ -17,8 +17,10 @@
 	  <label id="ytfm-loggedas" value="You are logged in as"/><label id="ytfm-userlabel" value=""/>
 	<label id="ytfm-notyou" value="Not you?"/>
 	<button id="ytfm-login-button" class="ytfm-login" label="Login with your account" onclick="openAuth();window.close();"/>
-	<label id="ytfm-status" />
-	
+	<hbox id="powered-by-container">
+		<label value="Powered by "/>
+		<image id="ytfm-user-image" src="chrome://ytfm/content/lastfm_red_small.gif" height="28px" width="80px"/>		
+	</hbox>
 	</vbox>
 </hbox>
 
