@@ -303,7 +303,7 @@ function updateNowPlaying()
 	duration="20";
 	api_args="api_key"+YTFM.api_key+"artist"+YTFM.lfm_artist+"duration"+duration+"methodtrack.updateNowPlayingsk"+YTFM.session_key+"track"+YTFM.lfm_track+YTFM.api_secret;
 		api_sig=md5(utf8_encode(api_args));
-		post_data="method=track.updateNowPlaying&track="+encodeURI(YTFM.lfm_track)+"&duration="+encodeURI(duration)+"&artist="+encodeURI(YTFM.lfm_artist)+"&sk="+YTFM.session_key+"&api_key="+YTFM.api_key+"&api_sig="+YTFM.api_sig;
+		post_data="method=track.updateNowPlaying&track="+encodeURI(YTFM.lfm_track)+"&duration="+encodeURI(duration)+"&artist="+encodeURI(YTFM.lfm_artist)+"&sk="+YTFM.session_key+"&api_key="+YTFM.api_key+"&api_sig="+api_sig;
 		http=new XMLHttpRequest();
 		http.open("POST","http://ws.audioscrobbler.com/2.0/",true);
 		http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -470,6 +470,7 @@ function init()
 gBrowser.addProgressListener(myExt_urlBarListener);
 
 window.addEventListener("OnUserInfoArrival",SaveUserInfo,false,true);
+
 }
 //Initializes AJAX YouTube API request if a video id is defined
 function set_URL()
