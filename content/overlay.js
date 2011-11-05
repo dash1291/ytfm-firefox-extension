@@ -1,24 +1,25 @@
-
-var vid_id;
-var video_title;
-var url='';
-var user_name;
-var yt_api_url;
-var cat_const;
-var lfm_track,lfm_artist;
-var parts;
-var scrobble_api_sig;
-var movie_player;
-var elapsed;
-var statetimer;
-var session_key;
-var status;
-var scrobble_enabled;
-var prev_vid_id;
-var session_token;
-api_key="977a73b8d997832303ec0a4bbd516ca7";
-api_secret="8fbe482d4ff9934adde892d53284ea28";
-function utf8_encode (argString) {
+window.addEventListener("load",function(){init();},false);
+var YTFM=new Object();
+YTFM.vid_id='';
+YTFM.video_title='';
+YTFM.url='';
+YTFM.user_name='';
+YTFM.yt_api_url='';
+YTFM.cat_const='';
+YTFM.lfm_track=YTFM.lfm_artist='';
+YTFM.parts=Array();
+YTFM.scrobble_api_sig='';
+YTFM.movie_player=null;
+YTFM.elapsed=0;
+YTFM.statetimer=null;
+YTFM.session_key=null;
+YTFM.status=null;
+YTFM.scrobble_enabled=null;
+YTFM.prev_vid_id='prev';
+YTFM.session_token=null;
+YTFM.api_key="977a73b8d997832303ec0a4bbd516ca7";
+YTFM.api_secret="8fbe482d4ff9934adde892d53284ea28";
+function utf8_encode(argString) {
     // http://kevin.vanzonneveld.net
     // +   original by: Webtoolkit.info (http://www.webtoolkit.info/)
     // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
@@ -68,7 +69,7 @@ function utf8_encode (argString) {
 
     return utftext;
 }
-function md5 (str) {
+function md5(str) {
     // http://kevin.vanzonneveld.net
     // +   original by: Webtoolkit.info (http://www.webtoolkit.info/)
     // + namespaced by: Michael White (http://getsprink.com)
@@ -282,11 +283,12 @@ function md5 (str) {
 		
 function checkState()
 {
-	player_state=movie_player.getPlayerState();
-	switch(player_state)
+
+	YTFM.player_state=YTFM.movie_player.getPlayerState();
+	switch(YTFM.player_state)
 	{
 		case 1: 	//state playing
-			elapsed++;
+			YTFM.elapsed++;
 			break;
 		case 2:		//paused state
 			break;
@@ -298,11 +300,11 @@ function checkState()
 }
 function updateNowPlaying()
 {
-		session_key=globalStorage['ytfm.ashishdubey.info'].getItem("key");
+		YTFM.session_key=globalStorage['ytfm.ashishdubey.info'].getItem("key");
 	duration="20";
-	api_args="api_key"+api_key+"artist"+lfm_artist+"duration"+duration+"methodtrack.updateNowPlayingsk"+session_key+"track"+lfm_track+api_secret;
+	api_args="api_key"+YTFM.api_key+"artist"+YTFM.lfm_artist+"duration"+duration+"methodtrack.updateNowPlayingsk"+YTFM.session_key+"track"+YTFM.lfm_track+YTFM.api_secret;
 		api_sig=md5(utf8_encode(api_args));
-		post_data="method=track.updateNowPlaying&track="+encodeURI(lfm_track)+"&duration="+encodeURI(duration)+"&artist="+encodeURI(lfm_artist)+"&sk="+session_key+"&api_key="+api_key+"&api_sig="+api_sig;
+		post_data="method=track.updateNowPlaying&track="+encodeURI(YTFM.lfm_track)+"&duration="+encodeURI(duration)+"&artist="+encodeURI(YTFM.lfm_artist)+"&sk="+YTFM.session_key+"&api_key="+YTFM.api_key+"&api_sig="+api_sig;
 		http=new XMLHttpRequest();
 		http.open("POST","http://ws.audioscrobbler.com/2.0/",true);
 		http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -312,14 +314,14 @@ function updateNowPlaying()
 function openAuth()
 {
 	get_token();
-	window.open("http://www.last.fm/api/auth/?api_key="+api_key+"&token="+session_token+"&cb=http://www.ashishdubey.info");
+	window.open("http://www.last.fm/api/auth/?api_key="+YTFM.api_key+"&token="+YTFM.session_token+"&cb=http://www.ashishdubey.info");
 }
 function get_session_key()
 {
 
-	session_token=globalStorage['ytfm.ashishdubey.info'].getItem("session-token");
-	request_url="http://ws.audioscrobbler.com/2.0/?method=auth.getSession&token="+session_token+"&api_key="+api_key+"&api_sig=";
-	api_args="api_key"+api_key+"methodauth.getSessiontoken"+session_token+api_secret;
+	YTFM.session_token=globalStorage['ytfm.ashishdubey.info'].getItem("session-token");
+	request_url="http://ws.audioscrobbler.com/2.0/?method=auth.getSession&token="+YTFM.session_token+"&api_key="+YTFM.api_key+"&api_sig=";
+	api_args="api_key"+YTFM.api_key+"methodauth.getSessiontoken"+YTFM.session_token+YTFM.api_secret;
 	api_sig=md5(utf8_encode(api_args));
 	request_url+=api_sig;
 	http=new XMLHttpRequest();
@@ -329,16 +331,16 @@ function get_session_key()
 	user_name_element=response_xml.getElementsByTagName("name");
 	if(user_name_element)
 	{
-		user_name=user_name_element[0].childNodes[0].nodeValue;
-		session_key=response_xml.getElementsByTagName("key")[0].childNodes[0].nodeValue;
+		YTFM.user_name=user_name_element[0].childNodes[0].nodeValue;
+		YTFM.session_key=response_xml.getElementsByTagName("key")[0].childNodes[0].nodeValue;
 		SaveUserInfo();
 	}
 }
 	
 function get_token()
 {
-	request_url="http://ws.audioscrobbler.com/2.0/?method=auth.gettoken&api_key="+api_key+"&api_sig=";
-	api_args="api_key"+api_key+"methodauth.gettoken"+api_secret;
+	request_url="http://ws.audioscrobbler.com/2.0/?method=auth.gettoken&api_key="+YTFM.api_key+"&api_sig=";
+	api_args="api_key"+YTFM.api_key+"methodauth.gettoken"+YTFM.api_secret;
 	api_sig=md5(utf8_encode(api_args));
 	request_url+=api_sig;
 	http=new XMLHttpRequest();
@@ -348,8 +350,8 @@ function get_token()
 	token_element=response_xml.getElementsByTagName("token");
 	if(token_element)
 	{
-		session_token=token_element[0].childNodes[0].nodeValue;
-		globalStorage['ytfm.ashishdubey.info'].setItem("session-token",session_token);  		
+		YTFM.session_token=token_element[0].childNodes[0].nodeValue;
+		globalStorage['ytfm.ashishdubey.info'].setItem("session-token",YTFM.session_token);  		
 	}
 	
 }
@@ -357,25 +359,26 @@ function get_token()
 
 function scrobble_track()
 {
-	session_key=globalStorage['ytfm.ashishdubey.info'].getItem("key");
-	if(elapsed==0)
-	{
-		movie_player=window.content.document.getElementById("movie_player");
-		movie_player =XPCNativeWrapper.unwrap(movie_player);	// unwraps the wrapper object for chrome security		
-		elapsed++;
-		scrobble_track();
 
+	YTFM.session_key=globalStorage['ytfm.ashishdubey.info'].getItem("key");
+	if(YTFM.elapsed==0)
+	{
+
+		YTFM.movie_player=window.content.document.getElementById("movie_player");
+		YTFM.movie_player =XPCNativeWrapper.unwrap(YTFM.movie_player);	// unwraps the wrapper object for chrome security		
+		YTFM.elapsed++;
+		scrobble_track();
 	}
-	else if(elapsed<20)
+	else if(YTFM.elapsed<20)
 	{
 		checkState();
-		statetimer=setTimeout(scrobble_track,1000);
+		YTFM.statetimer=setTimeout(scrobble_track,1000);
 	}
 	else{
 		time=new Date();
 		timestamp=Date.parse(time)/1000;
-		api_sig=md5(utf8_encode("api_key"+api_key+"artist[0]"+lfm_artist+"methodtrack.scrobblesk"+session_key+"timestamp[0]"+timestamp+"track[0]"+lfm_track+api_secret));
-		post_data="method=track.scrobble&track[0]="+encodeURI(lfm_track)+"&artist[0]="+encodeURI(lfm_artist)+"&sk="+session_key+"&timestamp[0]="+timestamp+"&api_key="+api_key+"&api_sig="+api_sig;
+		api_sig=md5(utf8_encode("api_key"+YTFM.api_key+"artist[0]"+YTFM.lfm_artist+"methodtrack.scrobblesk"+YTFM.session_key+"timestamp[0]"+timestamp+"track[0]"+YTFM.lfm_track+YTFM.api_secret));
+		post_data="method=track.scrobble&track[0]="+encodeURI(YTFM.lfm_track)+"&artist[0]="+encodeURI(YTFM.lfm_artist)+"&sk="+YTFM.session_key+"&timestamp[0]="+timestamp+"&api_key="+YTFM.api_key+"&api_sig="+api_sig;
 		http=new XMLHttpRequest();
 		http.open("POST","http://ws.audioscrobbler.com/2.0/",false);
 		http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -392,20 +395,20 @@ function openwindow()
 //The info stored includes the username and session key for the authenticated user
 function SaveUserInfo()
 {
-	globalStorage['ytfm.ashishdubey.info'].setItem("user",user_name);	
-	globalStorage['ytfm.ashishdubey.info'].setItem("key",session_key);
+	globalStorage['ytfm.ashishdubey.info'].setItem("user",YTFM.user_name);	
+	globalStorage['ytfm.ashishdubey.info'].setItem("key",YTFM.session_key);
 }
 //Loads saved user information from global client storage
 //The info stored includes the username and session key for the authenticated user
 function LoadUserInfo()
 {
 
-	user_name=globalStorage['ytfm.ashishdubey.info'].getItem("user") + '';	
-	session_key=globalStorage['ytfm.ashishdubey.info'].getItem("key");
+	YTFM.user_name=globalStorage['ytfm.ashishdubey.info'].getItem("user") + '';	
+	YTFM.session_key=globalStorage['ytfm.ashishdubey.info'].getItem("key");
 	if(user_name=="null") {disp_text="[Not logged in]";image_url="chrome://ytfm/content/unknown.png";}
 	else {
-		disp_text=user_name;
-		request_url="http://ws.audioscrobbler.com/2.0/?method=user.getinfo&user="+user_name+"&api_key="+api_key;
+		disp_text=YTFM.user_name;
+		request_url="http://ws.audioscrobbler.com/2.0/?method=user.getinfo&user="+YTFM.user_name+"&api_key="+YTFM.api_key;
 		http=new XMLHttpRequest();
 		http.open("GET",request_url,false);
 		http.send();
@@ -422,23 +425,24 @@ function LoadUserInfo()
 function get_videoID()
 {
 
-	movie_player=window.content.document.getElementById("movie_player");
-	movie_player=XPCNativeWrapper.unwrap(movie_player);	// unwraps the wrapper object for chrome security		
-	url=movie_player.getVideoUrl();
-	v_id_patch=url.split("v=");
-	if(v_id_patch.length<2){vid_id="";return;}
+	YTFM.movie_player=window.content.document.getElementById("movie_player");
+	YTFM.movie_player=XPCNativeWrapper.unwrap(YTFM.movie_player);	// unwraps the wrapper object for chrome security		
+	YTFM.url=YTFM.movie_player.getVideoUrl();
+	v_id_patch=YTFM.url.split("v=");
+	if(v_id_patch.length<2){YTFM.vid_id="";return;}
 	id_offset=v_id_patch[1].indexOf("&");
 	if(id_offset==-1) id_offset=v_id_patch[1].length;
-	vid_id=v_id_patch[1].substring(0,id_offset);
+	YTFM.vid_id=v_id_patch[1].substring(0,id_offset);
+
 }
 
 //Entry point invoked as the extension is loaded
 //Implements ProgressListener as a urlbarlistener which is invoked every time a url is changed or tab is changed
 function init()
-{
-	
-	user_name=globalStorage['ytfm.ashishdubey.info'].getItem("user") + '';	
-	session_key=globalStorage['ytfm.ashishdubey.info'].getItem("key");
+{	
+
+	YTFM.user_name=globalStorage['ytfm.ashishdubey.info'].getItem("user") + '';	
+	YTFM.session_key=globalStorage['ytfm.ashishdubey.info'].getItem("key");
 	var myExt_urlBarListener = {
   QueryInterface: function(aIID)
   {
@@ -450,10 +454,10 @@ function init()
   },
   onLocationChange: function(aProgress, aRequest, aURI)
   {
-	url=aURI.spec;
-	if(url=="http://www.last.fm/api/grantaccess") get_session_key();
+	YTFM.url=aURI.spec;
+	if(YTFM.url=="http://www.last.fm/api/grantaccess") get_session_key();
 	else{	
-		if(user_name!="null") {	
+		if(YTFM.user_name!="null") {	
 		set_URL();	
 		}
 	}
@@ -463,16 +467,15 @@ function init()
   onStatusChange: function(a, b, c, d) {},
   onSecurityChange: function(a, b, c) {}
 };
- gBrowser.addProgressListener(myExt_urlBarListener,
-        Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
+
+gBrowser.addProgressListener(myExt_urlBarListener);
 
 window.addEventListener("OnUserInfoArrival",SaveUserInfo,false,true);
 }
 //Initializes AJAX YouTube API request if a video id is defined
 function set_URL()
 {	
-
-	url_search=url.search("youtube.com");
+	url_search=YTFM.url.search("youtube.com");
 	if(url_search!=-1)
 	{	
 					setTimeout(function()
@@ -481,17 +484,19 @@ function set_URL()
 						sendyoutuberequest();
 					},3000);					
 	}
+
 }
 function sendyoutuberequest()
 {
-	if(vid_id!='')
+	if(YTFM.vid_id!='')
 					{
-						if(vid_id!=prev_vid_id)
+
+						if(YTFM.vid_id!=YTFM.prev_vid_id)
 						{
-							prev_vid_id=vid_id;
-							elapsed=0;
-							yt_api_url="http://gdata.youtube.com/feeds/api/videos/"+vid_id+"?v=2";
-							cat_const='http://gdata.youtube.com/schemas/2007/categories.cat';
+							YTFM.prev_vid_id=YTFM.vid_id;
+							YTFM.elapsed=0;
+							yt_api_url="http://gdata.youtube.com/feeds/api/videos/"+YTFM.vid_id+"?v=2";
+							YTFM.cat_const='http://gdata.youtube.com/schemas/2007/categories.cat';
 							http=new XMLHttpRequest();
 							http.open("GET",yt_api_url,true);
 							http.onreadystatechange=getyoutubedata;
@@ -519,7 +524,7 @@ function getyoutubedata()
 			while(category_nodes[cat_index])
 			{
 				cat_scheme=category_nodes[cat_index].getAttribute("scheme");
-				if(cat_scheme==cat_const)
+				if(cat_scheme==YTFM.cat_const)
 				{
 					cat=category_nodes[cat_index].getAttribute("label");
 					break;
@@ -528,15 +533,16 @@ function getyoutubedata()
 			}
 			if(cat=='Music')
 			{
-				video_title=response_xml.getElementsByTagName("title")[0].childNodes[0].nodeValue;
+				YTFM.video_title=response_xml.getElementsByTagName("title")[0].childNodes[0].nodeValue;
 				lookup_track_data();
+
 			}
 		} // (status==200)
 	}//(readystate==4)
 }
 //Initializes Last.fm API for track search
 function lookup_track_data(){
-		track_url="http://ws.audioscrobbler.com/2.0/?method=track.search&track="+encodeURI(video_title)+"&api_key=977a73b8d997832303ec0a4bbd516ca7&limit=1";
+		track_url="http://ws.audioscrobbler.com/2.0/?method=track.search&track="+encodeURI(YTFM.video_title)+"&api_key=977a73b8d997832303ec0a4bbd516ca7&limit=1";
 		http2=new XMLHttpRequest();
 		http2.open("GET",track_url,true);
 		http2.onreadystatechange=getlastfmdata;
@@ -558,8 +564,8 @@ function getlastfmdata()
 			track_matches=response_xml.getElementsByTagName("track");
 			if(track_matches[0])
 			{
-				lfm_track=track_matches[0].getElementsByTagName("name")[0].childNodes[0].nodeValue;
-				lfm_artist=track_matches[0].getElementsByTagName("artist")[0].childNodes[0].nodeValue;
+				YTFM.lfm_track=track_matches[0].getElementsByTagName("name")[0].childNodes[0].nodeValue;
+				YTFM.lfm_artist=track_matches[0].getElementsByTagName("artist")[0].childNodes[0].nodeValue;
 				updateNowPlaying();
 				scrobble_track();
 
@@ -567,14 +573,16 @@ function getlastfmdata()
 			else check_parts();
 		}
 	}
+
 }	
 function check_parts()
 {
-	if(video_title.search(':')!=-1) parts=video_title.split(':');
-	if(video_title.search('-')!=-1) parts=video_title.split('-');
-				if(parts.length>1)
+	if(YTFM.video_title.search(':')!=-1) YTFM.parts=YTFM.video_title.split(':');
+	if(YTFM.video_title.search('-')!=-1) YTFM.parts=YTFM.video_title.split('-');
+
+				if(YTFM.parts.length>1)
 				{
-					track_url="http://ws.audioscrobbler.com/2.0/?method=track.search&track="+encodeURI(parts[0])+"&api_key=977a73b8d997832303ec0a4bbd516ca7&limit=1";
+					track_url="http://ws.audioscrobbler.com/2.0/?method=track.search&track="+encodeURI(YTFM.parts[0])+"&api_key=977a73b8d997832303ec0a4bbd516ca7&limit=1";
 					http2=new XMLHttpRequest();
 					http2.open("GET",track_url,true);
 					http2.onreadystatechange=getlastfmpartsdata;
@@ -596,25 +604,26 @@ function getlastfmpartsdata()
 			while(track_matches[track_index])
 			{
 				track_name=track_matches[track_index].getElementsByTagName("name")[0].childNodes[0].nodeValue;
-				if(track_name==parts[0])
+				if(track_name==YTFM.parts[0])
 				{
 					break;
 				}
 				track_index++;
 			}		
-			if(track_name==parts[0]) 
+			if(track_name==YTFM.parts[0]) 
 			{
-				lfm_track=track_name;
-				lfm_artist=parts[1];
+				YTFM.lfm_track=track_name;
+				YTFM.lfm_artist=YTFM.parts[1];
 			}
 			else
 			{
-				lfm_track=parts[1];
-				lfm_artist=parts[0];
+				YTFM.lfm_track=YTFM.parts[1];
+				YTFM.lfm_artist=YTFM.parts[0];
 			}
 			updateNowPlaying();
 			scrobble_track();			
 		}
 	}
+				
 }	
 

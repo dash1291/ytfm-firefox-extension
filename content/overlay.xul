@@ -3,9 +3,7 @@
 <!DOCTYPE overlay SYSTEM "chrome://ytfm/locale/overlay.dtd">
 <overlay id="ytfm" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 <script type="text/javascript" src="chrome://ytfm/content/overlay.js"></script>
-<script type="text/javascript">
-init();
-</script>
+
   <menupopup id="menu_ToolsPopup">
 	<menuitem id="ytfm-menu-item" insertafter="browserToolsSeparator" label="YT.fm" onclick="openwindow()"/>
 </menupopup>
