@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+window.addEventListener("load",function(){init();},false);
+>>>>>>> v1.0
 var YTFM=new Object();
 YTFM.vid_id='';
 YTFM.video_title='';
@@ -475,7 +479,10 @@ window.addEventListener("OnUserInfoArrival",SaveUserInfo,false,true);
 //Initializes AJAX YouTube API request if a video id is defined
 function set_URL()
 {	
+<<<<<<< HEAD
 
+=======
+>>>>>>> v1.0
 	url_search=YTFM.url.search("youtube.com");
 	if(url_search!=-1)
 	{	
